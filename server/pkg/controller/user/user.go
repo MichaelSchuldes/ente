@@ -1,6 +1,7 @@
 package user
 
 import (
+	"os"
 	"errors"
 	"fmt"
 	"github.com/ente-io/museum/pkg/repo/two_factor_recovery"
@@ -309,7 +310,7 @@ func (c *UserController) NotifyAccountDeletion(userEmail string, isSubscriptionC
 	if !isSubscriptionCancelled {
 		template = AccountDeletedWithActiveSubscriptionEmailTemplate
 	}
-	err := email.SendTemplatedEmail([]string{userEmail}, "ente", "team@ente.io",
+	err := email.SendTemplatedEmail([]string{userEmail}, "ente", os.GetEnv("ENTE_SMTP_SENDERMAIL"),
 		AccountDeletedEmailSubject, template, nil, nil)
 	if err != nil {
 		logrus.WithError(err).Errorf("Failed to send the account deletion email to %s", userEmail)
